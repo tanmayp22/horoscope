@@ -1,5 +1,7 @@
-import 'package:horoscope/constant.dart';
-import 'package:horoscope/info_screen.dart';
+import 'package:test_auth/my_horoscope_app/utils/constants.dart';
+
+import '../constant.dart';
+import '../info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -43,14 +45,7 @@ class _MyHeaderState extends State<MyHeader> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return InfoScreen();
-                    },
-                  ),
-                );
+                Navigator.pop(context);
               },
               child: SvgPicture.asset("assets/icons/menu.svg"),
             ),
