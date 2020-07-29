@@ -38,7 +38,7 @@ class _InfoScreenState extends State<InfoScreen> {
 
   Future _getData() async {
     if (widget.horoscope == null) {
-      await get('http://192.168.43.188:5000/${widget.data}').then((value) {
+      await get('https://horoscope-scraper.herokuapp.com/${widget.data}').then((value) {
         widget.horoscope = Horoscope.fromJson(jsonDecode(value.body));
       });
     }
