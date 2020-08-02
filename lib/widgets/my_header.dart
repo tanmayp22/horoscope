@@ -1,7 +1,4 @@
-import 'package:test_auth/my_horoscope_app/utils/constants.dart';
-
-import '../constant.dart';
-import '../info_screen.dart';
+import '../utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:test_auth/horoscope/utils/Horoscope.dart';
-import 'package:test_auth/my_horoscope_app/utils/constants.dart';
-import 'constant.dart';
+import 'utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class InfoScreen extends StatefulWidget {
   final String data;
   final int color;
+  final String date;
   Horoscope horoscope;
-  InfoScreen(this.data, {this.color, this.horoscope});
+  InfoScreen(this.data, {this.color, this.horoscope, this.date});
 
   @override
   _InfoScreenState createState() => _InfoScreenState();
@@ -38,7 +38,8 @@ class _InfoScreenState extends State<InfoScreen> {
 
   Future _getData() async {
     if (widget.horoscope == null) {
-      await get('https://horoscope-scraper.herokuapp.com/${widget.data}').then((value) {
+      await get('https://horoscope-scraper.herokuapp.com/${widget.data}')
+          .then((value) {
         widget.horoscope = Horoscope.fromJson(jsonDecode(value.body));
       });
     }
@@ -71,43 +72,28 @@ class _InfoScreenState extends State<InfoScreen> {
                       title: "Today",
                       image: "assets/icons/${widget.data}.svg",
                       textTop: "${widget.data}",
-                      textBottom: "21 March - 20 April",
+                      textBottom: "${widget.date}",
                       offset: offset,
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            topRight: Radius.circular(50)),
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40)),
                         color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 10),
+                            blurRadius: 20,
+                            color: Colors.black,
+                          ),
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(height: 20),
-                          Center(
-                            child: Text(
-                              "Keywords",
-                              style: kTitleTextstyle,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                TextCard(
-                                  title: "Love",
-                                  color: 0xfff44336,
-                                ),
-                                TextCard(title: "Health", color: 0xFFFF7E06),
-                                TextCard(
-                                    title: "Friendship", color: 0xFF008C49),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 30),
                           Center(
                               child: Text("General Horoscope",
                                   style: kTitleTextstyle)),
@@ -319,6 +305,7 @@ class MoodCard extends StatelessWidget {
             title,
             style: TextStyle(
               color: Color(this.color),
+              fontSize: 12.8,
             ),
           ),
           SizedBox(
@@ -369,7 +356,7 @@ class _MyHeaderState extends State<MyHeader> {
     return ClipPath(
       /*clipper: MyClipper(),*/
       child: Container(
-        padding: EdgeInsets.only(left: 40, top: 60, right: 20),
+        padding: EdgeInsets.only(left: 40, top: 60, right: 40),
         height: 360,
         width: double.infinity,
         /*decoration: BoxDecoration(
@@ -389,9 +376,83 @@ class _MyHeaderState extends State<MyHeader> {
             ),
             SizedBox(height: 20),
             Expanded(
-              child: Stack(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      /*"${widget.textTop} \n${widget.textBottom}",*/
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      style: kHeadingTextStyle.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    SvgPicture.asset(
+                      widget.image,
+                      alignment: Alignment.center,
+                      height: 80,
+                      fit: BoxFit.fitWidth,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      /*"${widget.textTop} \n${widget.textBottom}",*/
+                      widget.textTop,
+                      textAlign: TextAlign.center,
+                      style: kHeadingTextStyle.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      widget.textBottom,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+
+                    /*Positioned(
+                      top: 0 - widget.offset / 1,
+                      left: 125,
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            /*"${widget.textTop} \n${widget.textBottom}",*/
+                            widget.title,
+                            textAlign: TextAlign.center,
+                            style: kHeadingTextStyle.copyWith(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),*/
+
+                    /*Positioned(
+                      top: (widget.offset < 0) ? 0 : 50 - widget.offset,
+                      left: 120,
+                      child: SvgPicture.asset(
+                        widget.image,
+                        alignment: Alignment.center,
+                        height: 80,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),*/
+
+                    // I dont know why it can't work without container
+                  ],
+                ),
+              ),
+
+              /*child: Stack(
                 children: <Widget>[
-                  Positioned(
+                  /*Positioned(
                     top: 0 - widget.offset / 1,
                     left: 125,
                     child: Column(
@@ -406,14 +467,41 @@ class _MyHeaderState extends State<MyHeader> {
                         ),
                       ],
                     ),
+                  ),*/
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          /*"${widget.textTop} \n${widget.textBottom}",*/
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: kHeadingTextStyle.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Positioned(
+
+                  /*Positioned(
                     top: (widget.offset < 0) ? 0 : 50 - widget.offset,
-                    left: 110,
+                    left: 120,
                     child: SvgPicture.asset(
                       widget.image,
                       alignment: Alignment.center,
-                      width: 80,
+                      height: 80,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),*/
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      widget.image,
+                      alignment: Alignment.center,
+                      height: 80,
                       fit: BoxFit.fitWidth,
                     ),
                   ),
@@ -445,7 +533,7 @@ class _MyHeaderState extends State<MyHeader> {
                   ),
                   Container(), // I dont know why it can't work without container
                 ],
-              ),
+              ),*/
             ),
           ],
         ),
